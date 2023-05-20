@@ -1,0 +1,15 @@
+pipeline:
+  build:
+    image: sh
+    commands:
+      - cargo build
+
+  flash:
+    image: sh
+    commands:
+      - cargo flash --release --chip RP2040
+
+  test:
+    image: sh
+    commands:
+      - echo "TODO"
