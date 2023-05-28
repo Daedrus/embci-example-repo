@@ -56,10 +56,11 @@ specify the target plus `codegen` flags. Possible flags are documented
 
 The target triple for the Cortex M0+ is `thumbv6m-none-eabi` as can be seen
 [here](https://doc.rust-lang.org/nightly/rustc/platform-support.html). A good
-explanation for what target triples are, can be found [here](https://www.flother.is/til/llvm-target-triple/).
+explanation on target triples can be found [here](https://www.flother.is/til/llvm-target-triple/).
 
 The `-Tlink.x` flag currently tells the Rust linker (which by default seems
 to be set to LLVM's [LLD linker](https://lld.llvm.org/), but it can be changed)
 to use `link.x` as a linker script. That linker script is provided by the
-`cortex-m-rt` crate and it includes the `memory.x` script which is present in
-this repository. For more information, look at the `link.x` script directly.
+`cortex-m-rt` crate which in turn includes the user-defined `memory.x` script
+which is present in this repository. For more information, look at the `link.x`
+script directly.
