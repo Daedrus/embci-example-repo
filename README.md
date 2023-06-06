@@ -6,8 +6,8 @@ Arm Cores can be found [here](https://en.wikipedia.org/wiki/ARM_Cortex-M).
 
 ---
 
-Currently running a minimal Rust example that just loops forever. Using a HAL
-right from the start abstracts away too many details, so for now only use
+Currently running a minimal Rust example that just toggles a GPIO pin. Using a
+HAL right from the start abstracts away too many details, so for now only use
 the `cortex-m`, `cortex-m-rt` and `panic-halt` crates. Links to those crates'
 documentation can be found in the `Cargo.toml` file.
 

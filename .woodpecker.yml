@@ -12,4 +12,5 @@ pipeline:
   test:
     image: sh
     commands:
-      - echo "TODO"
+      - python3 saleae_example.py
+      - cat output/digital.csv
