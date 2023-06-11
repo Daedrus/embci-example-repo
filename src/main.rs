@@ -48,7 +48,7 @@ fn main() -> ! {
 
     let led_gpio_pin = &peripherals.IO_BANK0.gpio[TEST_GPIO_PIN];
     led_gpio_pin.gpio_ctrl.write(|w| w
-        .funcsel().sio_0()
+        .funcsel().sio()
     );
 
     sio.gpio_oe_set.write(|w| unsafe { w.bits(1 << TEST_GPIO_PIN) });
