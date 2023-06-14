@@ -65,3 +65,43 @@ to use `link.x` as a linker script. That linker script is provided by the
 `cortex-m-rt` crate which in turn includes the user-defined `memory.x` script
 which is present in this repository. For more information, look at the `link.x`
 script directly.
+
+---
+
+`rp2040-pac` (where pac stands for Peripheral Access Crate, see documentation
+[here](https://docs.rust-embedded.org/discovery/microbit/04-meet-your-hardware/terminology.html#peripheral-access-crate-pac))
+is the first layer of abstraction over the registers of the chip. I have only
+taken a brief look at the crate's code but I feel like the keys to the kingdom
+are in this crate, in understanding the types it declares and how those types
+manage to express (and hide) things like "write value x to memory mapped
+register y", "toggle bit a in memory mapped register y", and so on.
+
+The crate itself is (mostly) auto-generated from what I understand, the
+generation process being reproducible through the `update.sh` script
+[here](https://github.com/rp-rs/rp2040-pac/blob/92f047d61fe9197fcb567127681b83e4efc6b444/update.sh).
+
+The theory is that silicon vendors using ARM architectures in their chip
+design should provide a `CMSIS-SVD` file which is an .xml file describing
+everything in the chip, with the memory-mapped registers being an important
+part. So the crate has used such an .svd file as its foundation, it is
+included in the repository [here](https://github.com/rp-rs/rp2040-pac/blob/92f047d61fe9197fcb567127681b83e4efc6b444/svd/rp2040.svd).
+
+However, vendors often make mistakes in these .svd files (this case being no
+exception) and it seems to be such a reoccuring pattern that there exists an
+entire Python library meant to assist in patching these files: [svdtools](https://pypi.org/project/svdtools/).
+The library uses as input (besides the .svd file) a .yaml file where one can
+specify exactly what should be changed/patched in the input .svd file.
+
+[A patched rp2040.svd file](https://github.com/rp-rs/rp2040-pac/blob/92f047d61fe9197fcb567127681b83e4efc6b444/svd/rp2040.svd.patched)
+is thus passed to [svd2rust](https://github.com/rust-embedded/svd2rust) to
+produce the crate's Rust code, which is what we'll be digging into.
+
+The file containing all the type and trait definitions (which are then used
+in every other file) is [generic.rs](https://github.com/rp-rs/rp2040-pac/blob/92f047d61fe9197fcb567127681b83e4efc6b444/src/generic.rs)
+and it is where our journey of understanding begins.
+
+The Rust concepts which are immediately visible in that file and which we should
+understand are all under the [generics chapter](https://doc.rust-lang.org/rust-by-example/generics.html)
+of the [Rust by Example book](https://doc.rust-lang.org/rust-by-example/index.html).
+
+TO BE CONTINUED
