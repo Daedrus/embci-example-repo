@@ -1,0 +1,21 @@
+[package]
+name = "gpio_toggle_with_pac"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# https://docs.rs/cortex-m/0.7.7/cortex_m/index.html
+cortex-m = "0.7.7"
+
+# https://docs.rs/cortex-m-rt/0.7.3/cortex_m_rt/index.html
+cortex-m-rt = "0.7.3"
+
+# https://docs.rs/panic-halt/0.2.0/panic_halt/index.html
+panic-halt = "0.2.0"
+
+# https://docs.rs/rp2040-pac/0.4.0/rp2040_pac/index.html
+rp2040-pac = "0.4.0"
+
+# https://docs.rs/rp2040-boot2/0.3.0/rp2040_boot2/
+rp2040-boot2 = "0.3"
+
