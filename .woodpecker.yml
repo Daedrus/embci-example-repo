@@ -4,13 +4,26 @@ pipeline:
     commands:
       - cargo build
 
-  flash:
+  flash_gpio_toggle_unsafe:
+    image: sh
+    commands:
+      - cargo flash --bin gpio_toggle_unsafe --release --chip RP2040
+
+  test_gpio_toggle_unsafe:
+    image: sh
+    commands:
+      - python3 saleae_example.py
+      - mv output/digital.csv output/gpio_toggle_unsafe.csv
+      - cat output/gpio_toggle_unsafe.csv
+
+  flash_gpio_toggle_with_pac:
     image: sh
     commands:
       - cargo flash --bin gpio_toggle_with_pac --release --chip RP2040
 
-  test:
+  test_gpio_toggle_with_pac:
     image: sh
     commands:
       - python3 saleae_example.py
-      - cat output/digital.csv
+      - mv output/digital.csv output/gpio_toggle_with_pac.csv
+      - cat output/gpio_toggle_with_pac.csv

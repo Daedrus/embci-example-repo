@@ -13,8 +13,5 @@ cortex-m-rt = "0.7.3"
 # https://docs.rs/panic-halt/0.2.0/panic_halt/index.html
 panic-halt = "0.2.0"
 
-# https://docs.rs/rp2040-pac/0.4.0/rp2040_pac/index.html
-rp2040-pac = "0.4.0"
-
 # https://docs.rs/rp2040-boot2/0.3.0/rp2040_boot2/
 rp2040-boot2 = "0.3"

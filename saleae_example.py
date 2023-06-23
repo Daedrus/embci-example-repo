@@ -28,11 +28,7 @@ with automation.Manager.connect(port=10430) as manager:
 
         # Store output
         output_dir = os.path.join(os.getcwd(), f'output')
-        os.makedirs(output_dir)
+        os.makedirs(output_dir, exist_ok=True)
 
         # Export raw digital data to a CSV file
         capture.export_raw_data_csv(directory=output_dir, digital_channels=[0])
-
-        # Finally, save the capture to a file
-        capture_filepath = os.path.join(output_dir, 'example_capture.sal')
-        capture.save_capture(filepath=capture_filepath)
