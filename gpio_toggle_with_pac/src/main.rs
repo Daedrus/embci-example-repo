@@ -8,15 +8,13 @@
 
 use panic_halt as _;
 
-use cortex_m_rt::entry;
-
 #[link_section = ".boot_loader"]
 #[used]
 pub static BOOT_LOADER: [u8; 256] = rp2040_boot2::BOOT_LOADER_W25Q080;
 
 const TEST_GPIO_PIN: usize = 0;
 
-#[entry]
+#[cortex_m_rt::entry]
 fn main() -> ! {
     let peripherals = rp2040_pac::Peripherals::take().unwrap();
 
@@ -63,6 +61,7 @@ fn main() -> ! {
     // Enable output on the GPIO pin
     sio.gpio_oe_set.write(|w| unsafe { w.bits(1 << TEST_GPIO_PIN) });
 
+    // Set up a delay using the cortex_m crate
     let core = rp2040_pac::CorePeripherals::take().unwrap();
     let mut delay = cortex_m::delay::Delay::new(core.SYST, 6000000);
 

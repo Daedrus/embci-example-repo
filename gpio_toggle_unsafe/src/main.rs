@@ -8,8 +8,6 @@
 
 use panic_halt as _;
 
-use cortex_m_rt::entry;
-
 #[link_section = ".boot_loader"]
 #[used]
 pub static BOOT_LOADER: [u8; 256] = rp2040_boot2::BOOT_LOADER_W25Q080;
@@ -47,7 +45,7 @@ const IO_BANK0_GPIOX_CTRL_OFFSET: u32 = 0x04;
 const IO_BANK0_GPIOX_CTRL_FUNCSEL_SHIFT: u32 = 0x0;
 const IO_BANK0_GPIOX_CTRL_FUNCSEL_SIO: u32 = 5;
 
-#[entry]
+#[cortex_m_rt::entry]
 fn main() -> ! {
     unsafe {
         // Enable the PADS_BANK0 and IO_BANK0 peripherals
@@ -88,6 +86,7 @@ fn main() -> ! {
         // Enable output on the GPIO pin
         *sio_gpio_oe_set = 1 << TEST_GPIO_PIN;
 
+        // Set up a delay using the cortex_m crate
         let core = cortex_m::Peripherals::take().unwrap();
         let mut delay = cortex_m::delay::Delay::new(core.SYST, 6000000);
 
