@@ -104,4 +104,54 @@ The Rust concepts which are immediately visible in that file and which we should
 understand are all under the [generics chapter](https://doc.rust-lang.org/rust-by-example/generics.html)
 of the [Rust by Example book](https://doc.rust-lang.org/rust-by-example/index.html).
 
-TO BE CONTINUED
+---
+
+Easiest way to start is with an actual example, so let's see how the RESET
+register is modeled since that is the first register we use in our
+`gpio_toggle_with_pac` example. You can read the details of the register in
+Table 202 in the rp2040 datasheet. Its description is: "Reset control. If a
+bit is set it means the peripheral is in reset. 0 means the peripheral’s reset
+is deasserted". We can see that all of its non-reserved bits are RW and they
+all have a defined reset value.
+
+We're not yet going to look into the details of its containing RegisterBlock
+(defined in [src/resets.rs](https://github.com/rp-rs/rp2040-pac/blob/v0.4.0/src/resets.rs#L3))
+in the PAC but it's important to notice that the RegisterBlock struct has the
+layout defined as [repr(c)](https://doc.rust-lang.org/nomicon/other-reprs.html#reprc).
+And since the `reset` field is the first one in that struct it will have
+offset 0x0 from the struct's base address. Without going into further details,
+that base address is defined in [src/lib.rs](https://github.com/rp-rs/rp2040-pac/blob/v0.4.0/src/lib.rs#L433)
+in the PAC. This gives us an idea of how registers get their address.
+
+Let's now start by looking at the definition for the `reset` field in the
+RegisterBlock:
+```
+pub reset: crate::Reg<reset::RESET_SPEC>,
+```
+
+The `crate` keyword is used quite a lot in the PAC so it is worth taking a look
+at its [definition](https://doc.rust-lang.org/std/keyword.crate.html). But the
+important thing here is to notice the pattern exposed by this definition and
+other similar fields:
+```
+pub register_name: crate::Reg<crate::RegisterSpec>,
+```
+
+So all fields (aka registers) will end up being of type Reg, which is a generic
+struct that has a type parameter bounded by the trait `RegisterSpec`. The trait
+and traits which have it as a [supertrait](https://doc.rust-lang.org/book/ch19-03-advanced-traits.html#using-supertraits-to-require-one-traits-functionality-within-another-trait)
+try to model readable, writable and resettable registers and the actions that
+one can perform on each of these register types.
+
+The `RegisterSpec` base trait simply defines an [associated type](https://doc.rust-lang.org/book/ch19-03-advanced-traits.html#specifying-placeholder-types-in-trait-definitions-with-associated-types)
+which each register will have to concretize to its size. Since the reset
+register is 32 bits wide, this will be the definition of the `RESET_SPEC`
+type which implements the `RegisterSpec` trait:
+```
+pub struct RESET_SPEC;
+impl crate::RegisterSpec for RESET_SPEC {
+    type Ux = u32;
+}
+```
+
+TODO: Explain VolatileCell, PhantomData and the R and W types
