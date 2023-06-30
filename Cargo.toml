@@ -3,4 +3,5 @@ members = [
     "gpio_toggle_unsafe",
     "gpio_toggle_with_pac",
     "gpio_toggle_with_hal",
+    "pwm_with_hal",
 ]
