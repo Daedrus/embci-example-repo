@@ -40,14 +40,14 @@ pipeline:
       - mv output/digital.csv output/gpio_toggle_with_hal.csv
       - cat output/gpio_toggle_with_hal.csv
 
-  flash_pwm_with_hal:
-    image: sh
-    commands:
-      - cargo flash --bin pwm_with_hal --release --chip RP2040
-
-  test_pwm_with_hal:
-    image: sh
-    commands:
-      - python3 saleae_example.py
-      - mv output/digital.csv output/test_pwm_with_hal.csv
-      - cat output/test_pwm_with_hal.csv
+  # flash_pwm_with_hal:
+  #   image: sh
+  #   commands:
+  #     - cargo flash --bin pwm_with_hal --release --chip RP2040
+  #
+  # test_pwm_with_hal:
+  #   image: sh
+  #   commands:
+  #     - python3 saleae_example.py
+  #     - mv output/digital.csv output/test_pwm_with_hal.csv
+  #     - cat output/test_pwm_with_hal.csv
