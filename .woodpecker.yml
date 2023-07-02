@@ -12,9 +12,7 @@ pipeline:
   test_gpio_toggle_unsafe:
     image: sh
     commands:
-      - python3 saleae_example.py
-      - mv output/digital.csv output/gpio_toggle_unsafe.csv
-      - cat output/gpio_toggle_unsafe.csv
+      - pytest tests/test_gpio_toggle.py -v -s
 
   flash_gpio_toggle_with_pac:
     image: sh
@@ -24,9 +22,7 @@ pipeline:
   test_gpio_toggle_with_pac:
     image: sh
     commands:
-      - python3 saleae_example.py
-      - mv output/digital.csv output/gpio_toggle_with_pac.csv
-      - cat output/gpio_toggle_with_pac.csv
+      - pytest tests/test_gpio_toggle.py -v -s
 
   flash_gpio_toggle_with_hal:
     image: sh
@@ -36,9 +32,7 @@ pipeline:
   test_gpio_toggle_with_hal:
     image: sh
     commands:
-      - python3 saleae_example.py
-      - mv output/digital.csv output/gpio_toggle_with_hal.csv
-      - cat output/gpio_toggle_with_hal.csv
+      - pytest tests/test_gpio_toggle.py -v -s
 
   # flash_pwm_with_hal:
   #   image: sh
