@@ -4,35 +4,36 @@ pipeline:
     commands:
       - cargo build
 
-  flash_gpio_toggle_unsafe:
+  configure_power_supply:
     image: sh
     commands:
-      - cargo flash --bin gpio_toggle_unsafe --release --chip RP2040
+      - python3 tests/control_power_supply.py '*IDN?'
+      - python3 tests/control_power_supply.py 'VSET1:05.00'
+      - python3 tests/control_power_supply.py 'VSET2:00.00'
 
-  test_gpio_toggle_unsafe:
+  flash_and_test_gpio_toggle_unsafe:
     image: sh
     commands:
+      - python3 tests/control_power_supply.py 'OUT1'
+      - cargo flash --bin gpio_toggle_unsafe --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
       - pytest tests/test_gpio_toggle.py -v -s
+      - python3 tests/control_power_supply.py 'OUT0'
 
-  flash_gpio_toggle_with_pac:
+  flash_and_test_gpio_toggle_with_pac:
     image: sh
     commands:
-      - cargo flash --bin gpio_toggle_with_pac --release --chip RP2040
-
-  test_gpio_toggle_with_pac:
-    image: sh
-    commands:
+      - python3 tests/control_power_supply.py 'OUT1'
+      - cargo flash --bin gpio_toggle_unsafe --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
       - pytest tests/test_gpio_toggle.py -v -s
+      - python3 tests/control_power_supply.py 'OUT0'
 
-  flash_gpio_toggle_with_hal:
+  flash_and_test_gpio_toggle_with_hal:
     image: sh
     commands:
-      - cargo flash --bin gpio_toggle_with_hal --release --chip RP2040
-
-  test_gpio_toggle_with_hal:
-    image: sh
-    commands:
+      - python3 tests/control_power_supply.py 'OUT1'
+      - cargo flash --bin gpio_toggle_unsafe --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
       - pytest tests/test_gpio_toggle.py -v -s
+      - python3 tests/control_power_supply.py 'OUT0'
 
   # flash_pwm_with_hal:
   #   image: sh
