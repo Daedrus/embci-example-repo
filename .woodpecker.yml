@@ -35,14 +35,10 @@ pipeline:
       - pytest tests/test_gpio_toggle.py -v -s
       - python3 tests/control_power_supply.py 'OUT0'
 
-  # flash_pwm_with_hal:
-  #   image: sh
-  #   commands:
-  #     - cargo flash --bin pwm_with_hal --release --chip RP2040
-  #
-  # test_pwm_with_hal:
-  #   image: sh
-  #   commands:
-  #     - python3 saleae_example.py
-  #     - mv output/digital.csv output/test_pwm_with_hal.csv
-  #     - cat output/test_pwm_with_hal.csv
+  flash_and_test_pwm_with_hal:
+    image: sh
+    commands:
+      - python3 tests/control_power_supply.py 'OUT1'
+      - cargo flash --bin pwm_with_hal --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
+      - pytest tests/test_gpio_toggle.py -v -s
+      - python3 tests/control_power_supply.py 'OUT0'

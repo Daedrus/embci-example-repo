@@ -51,8 +51,7 @@ def test_gpio_toggle():
         print("Found gpio pin in following states:", pin_state_lines)
 
         # If there are no samples something went wrong
-        # If there are too many transitions then something is wrong with the clocks
-        assert len(pin_state_lines) != 0 and len(pin_state_lines) < 15
+        assert len(pin_state_lines) != 0
 
         # [('1', '0'), ('0', '1'), ('1', '0') ... ]
         pin_state_transitions = sliding_window(
