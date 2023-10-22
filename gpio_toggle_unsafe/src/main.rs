@@ -4,7 +4,7 @@
 // This implementation is how one would write embedded Rust code in "C style"
 //
 // The delay implementation is using the cortex_m crates for convenience, it
-// could of course be wrriten in a similar style
+// could of course be written in a similar style
 
 use panic_halt as _;
 

@@ -7,5 +7,16 @@ edition = "2021"
 cortex-m.workspace = true
 cortex-m-rt.workspace = true
 panic-halt.workspace = true
-rp2040-pac.workspace = true
 rp2040-boot2.workspace = true
+# I initially wanted to only use the PAC crate and remove the HAL entirely but
+# I just can't figure out how to fix the critical-section stuff if I do it like
+# that
+#
+# https://github.com/rp-rs/rp-hal/issues/657
+#
+# rp2040-pac.workspace = true
+rp2040-hal.workspace = true
+
+[features]
+default = ["critical-section-impl"]
+critical-section-impl = ["rp2040-hal/critical-section-impl"]

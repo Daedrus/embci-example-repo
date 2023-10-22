@@ -3,8 +3,11 @@
 
 // This implementation takes things one step further by using the PAC
 //
+// Note that the PAC is accessed through the HAL only because I couldn't
+// fix the critical-section dependency of the rp2040-pac crate
+//
 // The delay implementation is using the cortex_m crates for convenience, it
-// could of course be wrriten in a similar style
+// could of course be written in a similar style
 
 use panic_halt as _;
 
@@ -16,7 +19,7 @@ const TEST_GPIO_PIN: usize = 0;
 
 #[cortex_m_rt::entry]
 fn main() -> ! {
-    let peripherals = rp2040_pac::Peripherals::take().unwrap();
+    let peripherals = rp2040_hal::pac::Peripherals::take().unwrap();
 
     // Enable the PADS_BANK0 and IO_BANK0 peripherals
     let resets = &peripherals.RESETS;
@@ -62,7 +65,7 @@ fn main() -> ! {
     sio.gpio_oe_set.write(|w| unsafe { w.bits(1 << TEST_GPIO_PIN) });
 
     // Set up a delay using the cortex_m crate
-    let core = rp2040_pac::CorePeripherals::take().unwrap();
+    let core = rp2040_hal::pac::CorePeripherals::take().unwrap();
     let mut delay = cortex_m::delay::Delay::new(core.SYST, 6000000);
 
     loop {

@@ -3,18 +3,18 @@ members = [
     "gpio_toggle_unsafe",
     "gpio_toggle_with_pac",
     "gpio_toggle_with_hal",
-    "pwm_with_hal",
+    # "pwm_with_hal",
 ]
 resolver = "2"
 
 [workspace.dependencies]
-# https://docs.rs/cortex-m/0.7.7/cortex_m/index.html
+# https://docs.rs/cortex-m/0.7.7/cortex_m/
 cortex-m = "0.7.7"
 
-# https://docs.rs/cortex-m-rt/0.7.3/cortex_m_rt/index.html
+# https://docs.rs/cortex-m-rt/0.7.3/cortex_m_rt/
 cortex-m-rt = "0.7.3"
 
-# https://docs.rs/panic-halt/0.2.0/panic_halt/index.html
+# https://docs.rs/panic-halt/0.2.0/panic_halt/
 panic-halt = "0.2.0"
 
 # https://docs.rs/rp2040-boot2/0.3.0/rp2040_boot2/
@@ -23,8 +23,8 @@ rp2040-boot2 = "0.3"
 # https://docs.rs/embedded-hal/0.2.7/embedded_hal/
 embedded-hal = "0.2.7"
 
-# https://docs.rs/rp2040-hal/0.8.2/rp2040_hal/
-rp2040-hal = "0.8.2"
+# https://docs.rs/rp2040-hal/0.9.0/rp2040_hal/
+rp2040-hal = "0.9.0"
 
-# https://docs.rs/rp2040-pac/0.4.0/rp2040_pac/index.html
-rp2040-pac = "0.4.0"
+# https://docs.rs/rp2040-pac/0.5.0/rp2040_pac/
+# rp2040-pac = "0.5.0"
