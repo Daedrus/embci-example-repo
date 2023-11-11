@@ -23,7 +23,7 @@ pipeline:
     image: sh
     commands:
       - python3 tests/control_power_supply.py 'OUT1'
-      - cargo flash --bin gpio_toggle_unsafe --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
+      - cargo flash --bin gpio_toggle_with_pac --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
       - pytest tests/test_gpio_toggle.py -v -s
       - python3 tests/control_power_supply.py 'OUT0'
 
@@ -31,7 +31,7 @@ pipeline:
     image: sh
     commands:
       - python3 tests/control_power_supply.py 'OUT1'
-      - cargo flash --bin gpio_toggle_unsafe --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
+      - cargo flash --bin gpio_toggle_with_hal --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
       - pytest tests/test_gpio_toggle.py -v -s
       - python3 tests/control_power_supply.py 'OUT0'
 
