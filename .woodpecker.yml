@@ -65,3 +65,15 @@ steps:
       - python3 tests/control_power_supply.py 'OUT1'
       - pytest tests/test_gpio_toggle.py -v -s
       - python3 tests/control_power_supply.py 'OUT0'
+
+  upload:
+    image: sh
+    commands: |
+      plugin-s3 \
+        --endpoint http://$MINIO_SERVER \
+        --bucket embci-artifacts \
+        --access-key $MINIO_ACCESS_KEY \
+        --secret-key $MINIO_SECRET_KEY \
+        --source 'output/*' \
+        --target ${CI_REPO_NAME}_${CI_PIPELINE_NUMBER} \
+        --path-style true
