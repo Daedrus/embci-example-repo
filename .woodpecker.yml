@@ -1,4 +1,4 @@
-pipeline:
+steps:
   build:
     image: sh
     commands:
@@ -7,16 +7,33 @@ pipeline:
   configure_power_supply:
     image: sh
     commands:
+      # Sanity check: power supply replies to IDN command
       - python3 tests/control_power_supply.py '*IDN?'
+
+      # For now, only provide power to one of the RPIs
       - python3 tests/control_power_supply.py 'VSET1:05.00'
       - python3 tests/control_power_supply.py 'VSET2:00.00'
 
+  # All other steps are similar to this one, the only difference is
+  # the flashed binary.
   flash_and_test_gpio_toggle_unsafe:
     image: sh
     commands:
+      # Turn on the RPI
       - python3 tests/control_power_supply.py 'OUT1'
+
+      # Flash it with specified binary
       - cargo flash --bin gpio_toggle_unsafe --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
+
+      # After flashing, do a power cycle to remove any configuration
+      # done by previous steps.
+      - python3 tests/control_power_supply.py 'OUT0'
+      - python3 tests/control_power_supply.py 'OUT1'
+
+      # Run the tests
       - pytest tests/test_gpio_toggle.py -v -s
+
+      # Turn off the RPI
       - python3 tests/control_power_supply.py 'OUT0'
 
   flash_and_test_gpio_toggle_with_pac:
@@ -24,6 +41,8 @@ pipeline:
     commands:
       - python3 tests/control_power_supply.py 'OUT1'
       - cargo flash --bin gpio_toggle_with_pac --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
+      - python3 tests/control_power_supply.py 'OUT0'
+      - python3 tests/control_power_supply.py 'OUT1'
       - pytest tests/test_gpio_toggle.py -v -s
       - python3 tests/control_power_supply.py 'OUT0'
 
@@ -32,6 +51,8 @@ pipeline:
     commands:
       - python3 tests/control_power_supply.py 'OUT1'
       - cargo flash --bin gpio_toggle_with_hal --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
+      - python3 tests/control_power_supply.py 'OUT0'
+      - python3 tests/control_power_supply.py 'OUT1'
       - pytest tests/test_gpio_toggle.py -v -s
       - python3 tests/control_power_supply.py 'OUT0'
 
@@ -40,5 +61,7 @@ pipeline:
     commands:
       - python3 tests/control_power_supply.py 'OUT1'
       - cargo flash --bin pwm_with_hal --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
+      - python3 tests/control_power_supply.py 'OUT0'
+      - python3 tests/control_power_supply.py 'OUT1'
       - pytest tests/test_gpio_toggle.py -v -s
       - python3 tests/control_power_supply.py 'OUT0'

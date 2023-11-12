@@ -1,5 +1,6 @@
 import argparse
 import pyvisa
+import time
 from pathlib import Path
 
 def main():
@@ -21,6 +22,9 @@ def main():
         rnd_320_ka3305p.write(args.query)
     else:
         print(rnd_320_ka3305p.query(args.query))
+
+    # Sleep for a second to allow the power supply to do its thing
+    time.sleep(1)
 
 if __name__ == '__main__':
     main()
