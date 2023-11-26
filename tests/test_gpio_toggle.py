@@ -3,11 +3,12 @@ import os
 import os.path
 import pytest
 import itertools
+import shutil
 from more_itertools import sliding_window
 
 
 @pytest.fixture(autouse=True)
-def get_saleae_capture():
+def get_raw_saleae_capture(capture_file):
 
     # Connect to the running Logic 2 Application on port `10430`
     with automation.Manager.connect(port=10430) as manager:
@@ -37,12 +38,16 @@ def get_saleae_capture():
             output_dir = os.path.join(os.getcwd(), f'output')
             os.makedirs(output_dir, exist_ok=True)
 
-            # Export raw digital data to a CSV file
+            # Export raw digital data to a CSV file. The CSV file is called
+            # digital.csv by default and there's no way to change the name
             capture.export_raw_data_csv(directory=output_dir, digital_channels=[0])
 
+            # So we rename it ourselves
+            shutil.move('output/digital.csv', 'output/' + capture_file)
 
-def test_gpio_toggle():
-    with open('output/digital.csv') as f:
+
+def test_gpio_toggle(capture_file):
+    with open('output/' + capture_file) as f:
         # The first line is "Time [s],Channel 0"
         # The second and last lines might have the same state as their subsequent/preceeding lines
         # lines are of the format 'timestamp,state', e.g.: '0.648999600,1'
