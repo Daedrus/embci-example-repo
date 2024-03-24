@@ -8,7 +8,7 @@ from more_itertools import sliding_window
 
 
 @pytest.fixture(autouse=True)
-def get_raw_saleae_capture(capture_file):
+def get_raw_saleae_capture(capture_file, saleae_capture_channel):
 
     # Connect to the running Logic 2 Application on port `10430`
     with automation.Manager.connect(port=10430) as manager:
@@ -16,7 +16,7 @@ def get_raw_saleae_capture(capture_file):
         # Configure the capturing device to record on digital channel 0
         # with a sampling rate of 10 MSa/s, and a logic level of 3.3V.
         device_configuration = automation.LogicDeviceConfiguration(
-                enabled_digital_channels=[0],
+                enabled_digital_channels=[saleae_capture_channel],
                 digital_sample_rate=10_000_000,
                 digital_threshold_volts=3.3,
                 )
