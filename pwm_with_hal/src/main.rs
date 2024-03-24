@@ -1,7 +1,7 @@
 #![no_main]
 #![no_std]
 
-use embedded_hal::PwmPin;
+use embedded_hal::pwm::SetDutyCycle;
 use panic_halt as _;
 
 #[link_section = ".boot_loader"]
@@ -43,17 +43,17 @@ fn main() -> ! {
     );
 
     // Init PWM slices
-    let mut pwm_slices = rp2040_hal::pwm::Slices::new(peripherals.PWM, &mut peripherals.RESETS);
+    let pwm_slices = rp2040_hal::pwm::Slices::new(peripherals.PWM, &mut peripherals.RESETS);
 
     // Set the period to 1000Hz (see chapter 4.5.2.6 in the datasheet)
-    let pwm = &mut pwm_slices.pwm0;
+    let mut pwm = pwm_slices.pwm0;
     pwm.set_top(62500);
     pwm.set_div_int(2);
     pwm.enable();
 
     // And the duty cycle to 25%
-    let channel = &mut pwm.channel_a;
-    channel.set_duty(62500 / 4);
+    let mut channel = pwm.channel_a;
+    let _ = channel.set_duty_cycle(62500 / 4);
     channel.output_to(pins.gpio0);
 
     loop {}

@@ -24,7 +24,7 @@ fn main() -> ! {
     // Enable the PADS_BANK0 and IO_BANK0 peripherals
     let resets = &peripherals.RESETS;
     resets
-        .reset
+        .reset()
         .modify(|_, w| w
             .pads_bank0().clear_bit()
             .io_bank0().clear_bit()
@@ -32,7 +32,7 @@ fn main() -> ! {
 
     // Wait for them to reset
     loop {
-        let resets_reset_done = resets.reset_done.read();
+        let resets_reset_done = resets.reset_done().read();
 
         if resets_reset_done.pads_bank0().bit_is_set() &&
             resets_reset_done.io_bank0().bit_is_set() {
@@ -44,11 +44,11 @@ fn main() -> ! {
     // and that it is low
     let sio = &peripherals.SIO;
 
-    sio.gpio_oe_clr.write(|w| unsafe { w.bits(1 << TEST_GPIO_PIN) });
-    sio.gpio_out_clr.write(|w| unsafe { w.bits(1 << TEST_GPIO_PIN) });
+    sio.gpio_oe_clr().write(|w| unsafe { w.bits(1 << TEST_GPIO_PIN) });
+    sio.gpio_out_clr().write(|w| unsafe { w.bits(1 << TEST_GPIO_PIN) });
 
     // Disable pull-down, disable input, make sure that output can be enabled
-    let gpio_pad = &peripherals.PADS_BANK0.gpio[TEST_GPIO_PIN];
+    let gpio_pad = &peripherals.PADS_BANK0.gpio(TEST_GPIO_PIN);
     gpio_pad.write(|w| w
         .pde().clear_bit()
         .ie().clear_bit()
@@ -56,13 +56,13 @@ fn main() -> ! {
     );
 
     // Configure the GPIO pin to be controlled through SIO
-    let gpio_pin = &peripherals.IO_BANK0.gpio[TEST_GPIO_PIN];
-    gpio_pin.gpio_ctrl.write(|w| w
+    let gpio_pin = &peripherals.IO_BANK0.gpio(TEST_GPIO_PIN);
+    gpio_pin.gpio_ctrl().write(|w| w
         .funcsel().sio()
     );
 
     // Enable output on the GPIO pin
-    sio.gpio_oe_set.write(|w| unsafe { w.bits(1 << TEST_GPIO_PIN) });
+    sio.gpio_oe_set().write(|w| unsafe { w.bits(1 << TEST_GPIO_PIN) });
 
     // Set up a delay using the cortex_m crate
     let core = rp2040_hal::pac::CorePeripherals::take().unwrap();
@@ -70,10 +70,10 @@ fn main() -> ! {
 
     loop {
         // Set the GPIO pin high
-        sio.gpio_out_set.write(|w| unsafe { w.bits(1 << TEST_GPIO_PIN) });
+        sio.gpio_out_set().write(|w| unsafe { w.bits(1 << TEST_GPIO_PIN) });
         delay.delay_ms(1000);
         // Set the GPIO pin low
-        sio.gpio_out_clr.write(|w| unsafe { w.bits(1 << TEST_GPIO_PIN) });
+        sio.gpio_out_clr().write(|w| unsafe { w.bits(1 << TEST_GPIO_PIN) });
         delay.delay_ms(1000);
     }
 }

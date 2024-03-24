@@ -3,7 +3,7 @@
 
 use panic_halt as _;
 
-use embedded_hal::digital::v2::OutputPin;
+use embedded_hal::digital::OutputPin;
 
 #[link_section = ".boot_loader"]
 #[used]
