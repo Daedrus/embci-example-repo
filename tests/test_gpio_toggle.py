@@ -40,7 +40,7 @@ def get_raw_saleae_capture(capture_file, saleae_capture_channel):
 
             # Export raw digital data to a CSV file. The CSV file is called
             # digital.csv by default and there's no way to change the name
-            capture.export_raw_data_csv(directory=output_dir, digital_channels=[0])
+            capture.export_raw_data_csv(directory=output_dir, digital_channels=[saleae_capture_channel])
 
             # So we rename it ourselves
             shutil.move('output/digital.csv', 'output/' + capture_file)
