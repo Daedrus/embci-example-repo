@@ -75,6 +75,22 @@ steps:
       - pytest tests/test_gpio_toggle.py -v -s --capture_file=pwm_with_hal_rp2.csv --saleae_capture_channel=12
       - python3 utils/control_power_supply.py 'OUTCH2:0'
 
+  flash_and_test_spi_with_hal:
+    image: sh
+    commands:
+      - python3 utils/control_power_supply.py 'OUTCH1:1'
+      - cargo flash --bin spi_with_hal_main --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
+      - python3 utils/control_power_supply.py 'OUTCH1:0'
+      - python3 utils/control_power_supply.py 'OUTCH2:1'
+      - cargo flash --bin spi_with_hal_sub --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_2_SERIAL
+      - python3 utils/control_power_supply.py 'OUTCH2:0'
+      # TODO: Add SPI test
+      # - python3 utils/control_power_supply.py 'OUTCH1:1'
+      # - python3 utils/control_power_supply.py 'OUTCH2:1'
+      # - pytest ...
+      # - python3 utils/control_power_supply.py 'OUTCH1:0'
+      # - python3 utils/control_power_supply.py 'OUTCH2:0'
+
   upload:
     image: sh
     commands: |
