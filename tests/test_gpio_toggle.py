@@ -8,7 +8,7 @@ from more_itertools import sliding_window
 
 
 @pytest.fixture(autouse=True)
-def get_raw_saleae_capture(capture_file, saleae_capture_channel):
+def get_raw_saleae_capture(capture_name, saleae_capture_channel):
 
     # Connect to the running Logic 2 Application on port `10430`
     with automation.Manager.connect(port=10430) as manager:
@@ -38,16 +38,20 @@ def get_raw_saleae_capture(capture_file, saleae_capture_channel):
             output_dir = os.path.join(os.getcwd(), f'output')
             os.makedirs(output_dir, exist_ok=True)
 
+            # Save the .sal capture file
+            sal_capture_name = os.path.join(output_dir, capture_name + '.sal')
+            capture.save_capture(sal_capture_name);
+
             # Export raw digital data to a CSV file. The CSV file is called
             # digital.csv by default and there's no way to change the name
             capture.export_raw_data_csv(directory=output_dir, digital_channels=[saleae_capture_channel])
 
             # So we rename it ourselves
-            shutil.move('output/digital.csv', 'output/' + capture_file)
+            shutil.move('output/digital.csv', 'output/' + capture_name + '.csv')
 
 
-def test_gpio_toggle(capture_file):
-    with open('output/' + capture_file) as f:
+def test_gpio_toggle(capture_name):
+    with open('output/' + capture_name + '.csv') as f:
         # The first line is "Time [s],Channel 0"
         # The second and last lines might have the same state as their subsequent/preceeding lines
         # lines are of the format 'timestamp,state', e.g.: '0.648999600,1'

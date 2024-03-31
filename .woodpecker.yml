@@ -30,7 +30,7 @@ steps:
       - python3 utils/control_power_supply.py 'OUTCH1:1'
 
       # Run the tests
-      - pytest tests/test_gpio_toggle.py -v -s --capture_file=gpio_toggle_unsafe.csv --saleae_capture_channel=0
+      - pytest tests/test_gpio_toggle.py -v -s --capture_name=gpio_toggle_unsafe --saleae_capture_channel=0
 
       # Turn off the RPI
       - python3 utils/control_power_supply.py 'OUTCH1:0'
@@ -42,7 +42,7 @@ steps:
       - cargo flash --bin gpio_toggle_with_pac --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
       - python3 utils/control_power_supply.py 'OUTCH1:0'
       - python3 utils/control_power_supply.py 'OUTCH1:1'
-      - pytest tests/test_gpio_toggle.py -v -s --capture_file=gpio_toggle_with_pac.csv --saleae_capture_channel=0
+      - pytest tests/test_gpio_toggle.py -v -s --capture_name=gpio_toggle_with_pac --saleae_capture_channel=0
       - python3 utils/control_power_supply.py 'OUTCH1:0'
 
   flash_and_test_gpio_toggle_with_hal:
@@ -52,7 +52,7 @@ steps:
       - cargo flash --bin gpio_toggle_with_hal --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
       - python3 utils/control_power_supply.py 'OUTCH1:0'
       - python3 utils/control_power_supply.py 'OUTCH1:1'
-      - pytest tests/test_gpio_toggle.py -v -s --capture_file=gpio_toggle_with_hal.csv --saleae_capture_channel=0
+      - pytest tests/test_gpio_toggle.py -v -s --capture_name=gpio_toggle_with_hal --saleae_capture_channel=0
       - python3 utils/control_power_supply.py 'OUTCH1:0'
 
   flash_and_test_pwm_with_hal_rp1:
@@ -62,7 +62,7 @@ steps:
       - cargo flash --bin pwm_with_hal --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
       - python3 utils/control_power_supply.py 'OUTCH1:0'
       - python3 utils/control_power_supply.py 'OUTCH1:1'
-      - pytest tests/test_gpio_toggle.py -v -s --capture_file=pwm_with_hal_rp1.csv --saleae_capture_channel=0
+      - pytest tests/test_gpio_toggle.py -v -s --capture_name=pwm_with_hal_rp1 --saleae_capture_channel=0
       - python3 utils/control_power_supply.py 'OUTCH1:0'
 
   flash_and_test_pwm_with_hal_rp2:
@@ -72,7 +72,7 @@ steps:
       - cargo flash --bin pwm_with_hal --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_2_SERIAL
       - python3 utils/control_power_supply.py 'OUTCH2:0'
       - python3 utils/control_power_supply.py 'OUTCH2:1'
-      - pytest tests/test_gpio_toggle.py -v -s --capture_file=pwm_with_hal_rp2.csv --saleae_capture_channel=12
+      - pytest tests/test_gpio_toggle.py -v -s --capture_name=pwm_with_hal_rp2 --saleae_capture_channel=12
       - python3 utils/control_power_supply.py 'OUTCH2:0'
 
   flash_and_test_spi_with_hal:

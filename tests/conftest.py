@@ -2,7 +2,7 @@ import pytest
 
 def pytest_addoption(parser):
     parser.addoption(
-        "--capture_file",
+        "--capture_name",
         action="store",
         default="digital.csv",
         help="name of Saleae capture file"
@@ -15,8 +15,8 @@ def pytest_addoption(parser):
     )
 
 @pytest.fixture
-def capture_file(request):
-    return request.config.getoption("--capture_file")
+def capture_name(request):
+    return request.config.getoption("--capture_name")
 
 @pytest.fixture
 def saleae_capture_channel(request):
