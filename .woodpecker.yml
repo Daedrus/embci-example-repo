@@ -102,3 +102,11 @@ steps:
         --source 'output/*' \
         --target ${CI_REPO_NAME}_${CI_PIPELINE_NUMBER} \
         --path-style true
+
+  cleanup:
+    image: sh
+    commands:
+      - python3 utils/control_power_supply.py 'OUTCH1:0'
+      - python3 utils/control_power_supply.py 'OUTCH2:0'
+    when:
+      - status: [ success, failure ]
