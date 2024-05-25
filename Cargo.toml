@@ -13,7 +13,7 @@ resolver = "2"
 cortex-m = "0.7.7"
 
 # https://docs.rs/cortex-m-rt/0.7.3/cortex_m_rt/
-cortex-m-rt = "0.7.4"
+cortex-m-rt = "0.7.3"
 
 # https://docs.rs/panic-halt/0.2.0/panic_halt/
 panic-halt = "0.2.0"
@@ -24,7 +24,7 @@ rp2040-boot2 = "0.3.0"
 # https://docs.rs/embedded-hal/1.0.0/embedded_hal/
 embedded-hal = "1.0.0"
 
-# https://docs.rs/rp2040-hal/0.10.0/rp2040_hal/
+# https://docs.rs/rp2040-hal/0.10.1/rp2040_hal/
 rp2040-hal = "0.10.1"
 
 # https://docs.rs/rp2040-pac/0.5.0/rp2040_pac/
