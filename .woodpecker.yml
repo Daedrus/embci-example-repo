@@ -11,7 +11,6 @@ steps:
       - python3 utils/control_power_supply.py '*IDN?'
 
       - python3 utils/control_power_supply.py 'VSET1:05.00'
-      - python3 utils/control_power_supply.py 'VSET2:05.00'
 
   # All other steps are similar to this one, the only difference is
   # the flashed binary.
@@ -55,41 +54,15 @@ steps:
       - pytest tests/test_gpio_toggle.py -v -s --capture_name=gpio_toggle_with_hal --saleae_capture_channel=0
       - python3 utils/control_power_supply.py 'OUTCH1:0'
 
-  flash_and_test_pwm_with_hal_rp1:
+  flash_and_test_pwm_with_hal:
     image: sh
     commands:
       - python3 utils/control_power_supply.py 'OUTCH1:1'
       - cargo flash --bin pwm_with_hal --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
       - python3 utils/control_power_supply.py 'OUTCH1:0'
       - python3 utils/control_power_supply.py 'OUTCH1:1'
-      - pytest tests/test_gpio_toggle.py -v -s --capture_name=pwm_with_hal_rp1 --saleae_capture_channel=0
+      - pytest tests/test_gpio_toggle.py -v -s --capture_name=pwm_with_hal --saleae_capture_channel=0
       - python3 utils/control_power_supply.py 'OUTCH1:0'
-
-  flash_and_test_pwm_with_hal_rp2:
-    image: sh
-    commands:
-      - python3 utils/control_power_supply.py 'OUTCH2:1'
-      - cargo flash --bin pwm_with_hal --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_2_SERIAL
-      - python3 utils/control_power_supply.py 'OUTCH2:0'
-      - python3 utils/control_power_supply.py 'OUTCH2:1'
-      - pytest tests/test_gpio_toggle.py -v -s --capture_name=pwm_with_hal_rp2 --saleae_capture_channel=12
-      - python3 utils/control_power_supply.py 'OUTCH2:0'
-
-  flash_and_test_spi_with_hal:
-    image: sh
-    commands:
-      - python3 utils/control_power_supply.py 'OUTCH1:1'
-      - cargo flash --bin spi_with_hal_main --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
-      - python3 utils/control_power_supply.py 'OUTCH1:0'
-      - python3 utils/control_power_supply.py 'OUTCH2:1'
-      - cargo flash --bin spi_with_hal_sub --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_2_SERIAL
-      - python3 utils/control_power_supply.py 'OUTCH2:0'
-      # TODO: Add SPI test
-      # - python3 utils/control_power_supply.py 'OUTCH1:1'
-      # - python3 utils/control_power_supply.py 'OUTCH2:1'
-      # - pytest ...
-      # - python3 utils/control_power_supply.py 'OUTCH1:0'
-      # - python3 utils/control_power_supply.py 'OUTCH2:0'
 
   upload:
     image: sh
@@ -107,6 +80,5 @@ steps:
     image: sh
     commands:
       - python3 utils/control_power_supply.py 'OUTCH1:0'
-      - python3 utils/control_power_supply.py 'OUTCH2:0'
     when:
       - status: [ success, failure ]
