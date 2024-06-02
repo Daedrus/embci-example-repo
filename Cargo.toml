@@ -4,6 +4,7 @@ members = [
     "gpio_toggle_with_pac",
     "gpio_toggle_with_hal",
     "pwm_with_hal",
+    "spi_with_hal",
 ]
 resolver = "2"
 

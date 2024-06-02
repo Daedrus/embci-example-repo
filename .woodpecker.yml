@@ -69,6 +69,15 @@ steps:
       - poetry run pytest tests/test_gpio_toggle.py -v -s --capture_name=pwm_with_hal --saleae_capture_channel=0
       - poetry run python3 utils/control_power_supply.py 'OUTCH1:0'
 
+  flash_and_test_spi_with_hal:
+    image: sh
+    commands:
+      - poetry run python3 utils/control_power_supply.py 'OUTCH1:1'
+      - cargo flash --bin spi_with_hal --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
+      - poetry run python3 utils/control_power_supply.py 'OUTCH1:0'
+      # The test_spi.py test controls the power supply itself
+      - poetry run pytest tests/test_spi.py -v -s --capture_name=spi_with_hal.csv
+
   upload:
     image: sh
     commands: |
