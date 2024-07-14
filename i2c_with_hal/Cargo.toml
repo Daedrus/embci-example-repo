@@ -1,0 +1,20 @@
+[package]
+name = "i2c_with_hal"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cortex-m.workspace = true
+cortex-m-rt.workspace = true
+panic-halt.workspace = true
+embedded-hal.workspace = true
+rp2040-hal.workspace = true
+rp2040-boot2.workspace = true
+arrayref = "*"
+
+# Workaround for https://github.com/rust-embedded/embedded-hal/issues/598
+portable-atomic = { version = "*", features = ["critical-section"] }
+
+[[bin]]
+name = "i2c_with_hal"
+path = "src/main.rs"
