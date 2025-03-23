@@ -7,18 +7,13 @@ steps:
     commands:
       - cargo build
 
-  configure_python_env:
-    image: sh
-    commands:
-      - poetry install
-
   configure_power_supply:
     image: sh
     commands:
       # Sanity check: power supply replies to IDN command
-      - poetry run python3 utils/control_power_supply.py '*IDN?'
+      - uv run utils/control_power_supply.py '*IDN?'
 
-      - poetry run python3 utils/control_power_supply.py 'VSET1:05.00'
+      - uv run utils/control_power_supply.py 'VSET1:05.00'
 
   # All other steps are similar to this one, the only difference is
   # the flashed binary.
@@ -26,69 +21,69 @@ steps:
     image: sh
     commands:
       # Turn on the RPI
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:1'
+      - uv run utils/control_power_supply.py 'OUTCH1:1'
 
       # Flash it with specified binary
       - cargo flash --bin gpio_toggle_unsafe --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
 
       # After flashing, do a power cycle to remove any configuration
       # done by previous steps.
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:0'
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:1'
+      - uv run utils/control_power_supply.py 'OUTCH1:0'
+      - uv run utils/control_power_supply.py 'OUTCH1:1'
 
       # Run the tests
-      - poetry run pytest tests/test_gpio_toggle.py -v -s --capture_name=gpio_toggle_unsafe --saleae_capture_channel=0
+      - uv run pytest tests/test_gpio_toggle.py -v -s --capture_name=gpio_toggle_unsafe --saleae_capture_channel=0
 
       # Turn off the RPI
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:0'
+      - uv run utils/control_power_supply.py 'OUTCH1:0'
 
   flash_and_test_gpio_toggle_with_pac:
     image: sh
     commands:
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:1'
+      - uv run utils/control_power_supply.py 'OUTCH1:1'
       - cargo flash --bin gpio_toggle_with_pac --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:0'
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:1'
-      - poetry run pytest tests/test_gpio_toggle.py -v -s --capture_name=gpio_toggle_with_pac --saleae_capture_channel=0
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:0'
+      - uv run utils/control_power_supply.py 'OUTCH1:0'
+      - uv run utils/control_power_supply.py 'OUTCH1:1'
+      - uv run pytest tests/test_gpio_toggle.py -v -s --capture_name=gpio_toggle_with_pac --saleae_capture_channel=0
+      - uv run utils/control_power_supply.py 'OUTCH1:0'
 
   flash_and_test_gpio_toggle_with_hal:
     image: sh
     commands:
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:1'
+      - uv run utils/control_power_supply.py 'OUTCH1:1'
       - cargo flash --bin gpio_toggle_with_hal --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:0'
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:1'
-      - poetry run pytest tests/test_gpio_toggle.py -v -s --capture_name=gpio_toggle_with_hal --saleae_capture_channel=0
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:0'
+      - uv run utils/control_power_supply.py 'OUTCH1:0'
+      - uv run utils/control_power_supply.py 'OUTCH1:1'
+      - uv run pytest tests/test_gpio_toggle.py -v -s --capture_name=gpio_toggle_with_hal --saleae_capture_channel=0
+      - uv run utils/control_power_supply.py 'OUTCH1:0'
 
   flash_and_test_pwm_with_hal:
     image: sh
     commands:
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:1'
+      - uv run utils/control_power_supply.py 'OUTCH1:1'
       - cargo flash --bin pwm_with_hal --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:0'
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:1'
-      - poetry run pytest tests/test_gpio_toggle.py -v -s --capture_name=pwm_with_hal --saleae_capture_channel=0
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:0'
+      - uv run utils/control_power_supply.py 'OUTCH1:0'
+      - uv run utils/control_power_supply.py 'OUTCH1:1'
+      - uv run pytest tests/test_gpio_toggle.py -v -s --capture_name=pwm_with_hal --saleae_capture_channel=0
+      - uv run utils/control_power_supply.py 'OUTCH1:0'
 
   flash_and_test_spi_with_hal:
     image: sh
     commands:
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:1'
+      - uv run utils/control_power_supply.py 'OUTCH1:1'
       - cargo flash --bin spi_with_hal --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:0'
+      - uv run utils/control_power_supply.py 'OUTCH1:0'
       # The test_spi.py test controls the power supply itself
-      - poetry run pytest tests/test_spi.py -v -s --capture_name=spi_with_hal.csv
+      - uv run pytest tests/test_spi.py -v -s --capture_name=spi_with_hal.csv
 
   flash_and_test_i2c_with_hal:
     image: sh
     commands:
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:1'
+      - uv run utils/control_power_supply.py 'OUTCH1:1'
       - cargo flash --bin i2c_with_hal --release --chip RP2040 --probe 2e8a:000c:$DEBUG_PROBE_1_SERIAL
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:0'
+      - uv run utils/control_power_supply.py 'OUTCH1:0'
       # The test_i2c.py test controls the power supply itself
-      - poetry run pytest tests/test_i2c.py -v -s --capture_name=i2c_with_hal.csv
+      - uv run pytest tests/test_i2c.py -v -s --capture_name=i2c_with_hal.csv
 
   upload:
     image: sh
@@ -105,6 +100,6 @@ steps:
   cleanup:
     image: sh
     commands:
-      - poetry run python3 utils/control_power_supply.py 'OUTCH1:0'
+      - uv run utils/control_power_supply.py 'OUTCH1:0'
     when:
       - status: [ success, failure ]
