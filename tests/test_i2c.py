@@ -58,7 +58,7 @@ def get_spi_saleae_capture(capture_name):
             )
 
 
-def test_spi(capture_name):
+def test_i2c(capture_name):
     with open('output/' + capture_name) as f:
         # The first line is "Time [s],Packet ID,Address,Data,Read/Write,ACK/NAK"
         i2c_bytes = f.read().splitlines()[1:]
